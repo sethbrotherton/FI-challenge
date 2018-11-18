@@ -1,0 +1,21 @@
+.text-area {
+  font-size: 1.2em;
+  color: green;
+  margin: auto 1em;
+  padding: 1em;
+  border-radius: 10px;
+}
+
+.error {
+  color: red;
+}
+
+.no-error {
+  color: green;
+}
+
+.errors-description {
+  display: inline-block;
+  width: 25%;
+  padding-bottom: 2em;
+}
