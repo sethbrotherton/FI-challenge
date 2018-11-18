@@ -18,6 +18,7 @@ class TextArea extends React.Component {
     });
   };
 
+  // these functions are called on keydown event
   handleSyntax = e => {
     this.handleParenth();
     this.handleCurlyBraces();
@@ -27,6 +28,7 @@ class TextArea extends React.Component {
     this.closingSquareFirst();
   };
 
+  // Makes sure there are the same number of opening and closing curly braces
   handleCurlyBraces = () => {
     const { value } = this.state;
     const valueArray = value.split("");
@@ -43,6 +45,7 @@ class TextArea extends React.Component {
     }
   };
 
+  // Makes sure there are the same number of opening and closing parentheses
   handleParenth = () => {
     const { value } = this.state;
     const valueArray = value.split("");
@@ -59,6 +62,7 @@ class TextArea extends React.Component {
     }
   };
 
+  // Ensures same number of opening and closing square brackets
   handleSquareBrackets = () => {
     const { value } = this.state;
     const valueArray = value.split("");
@@ -75,6 +79,7 @@ class TextArea extends React.Component {
     }
   };
 
+  // Ensures that there aren't any closing curlies before opening ones
   closingCurlyFirst = () => {
     let curly = 0;
     const { value } = this.state;
@@ -98,6 +103,7 @@ class TextArea extends React.Component {
     });
   };
 
+  // ensures no closing parentheses before opening
   closingParenthFirst = () => {
     let parenth = 0;
     const { value } = this.state;
@@ -121,6 +127,7 @@ class TextArea extends React.Component {
     });
   };
 
+  // ensures no closing square brackets before opening
   closingSquareFirst = () => {
     let square = 0;
     const { value } = this.state;
