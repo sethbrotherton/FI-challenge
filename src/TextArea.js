@@ -42,41 +42,29 @@ class TextArea extends React.Component {
   };
 
   // Makes sure there are the same number of opening and closing curly braces
-  handleCurlyBraces = () => {
+  handleCurlyBraces = braceError => {
     if (!this.getLengths("{", "}")) {
-      this.setState(state => {
-        state.braceError = true;
-      });
+      this.setState(state => (state.braceError = true));
     } else if (this.getLengths("{", "}")) {
-      this.setState(state => {
-        state.braceError = false;
-      });
+      this.setState(state => (state.braceError = false));
     }
   };
 
   // Makes sure there are the same number of opening and closing parentheses
   handleParenth = () => {
     if (!this.getLengths("(", ")")) {
-      this.setState({
-        parenthError: true
-      });
+      this.setState(state => (state.parenthError = true));
     } else if (this.getLengths("(", ")")) {
-      this.setState({
-        parenthError: false
-      });
+      this.setState(state => (state.parenthError = false));
     }
   };
 
   // Ensures same number of opening and closing square brackets
   handleSquareBrackets = () => {
     if (!this.getLengths("[", "]")) {
-      this.setState({
-        squareError: true
-      });
+      this.setState(state => (state.squareError = true));
     } else if (this.getLengths("[", "]")) {
-      this.setState({
-        squareError: false
-      });
+      this.setState(state => (state.squareError = false));
     }
   };
 
@@ -89,13 +77,9 @@ class TextArea extends React.Component {
       if (char === "}") {
         curly -= 1;
         if (curly <= -1) {
-          return this.setState({
-            closeCurlyFirst: true
-          });
-        } else {
-          this.setState({
-            closeCurlyFirst: false
-          });
+          this.setState(state => (state.closeCurlyFirst = true));
+        } else if (curly > -1) {
+          this.setState(state => (state.closeCurlyFirst = false));
         }
       } else if (char === "{") {
         curly += 1;
@@ -113,13 +97,9 @@ class TextArea extends React.Component {
       if (char === ")") {
         parenth -= 1;
         if (parenth <= -1) {
-          return this.setState({
-            closeParenthFirst: true
-          });
+          this.setState(state => (state.closeParenthFirst = true));
         } else {
-          this.setState({
-            closeParenthFirst: false
-          });
+          this.setState(state => (state.closeParenthFirst = false));
         }
       } else if (char === "(") {
         parenth += 1;
@@ -137,13 +117,9 @@ class TextArea extends React.Component {
       if (char === "]") {
         square -= 1;
         if (square <= -1) {
-          return this.setState({
-            closeSquareFirst: true
-          });
+          this.setState(state => (state.closeSquareFirst = true));
         } else {
-          this.setState({
-            closeSquareFirst: false
-          });
+          this.setState(state => (state.closeSquareFirst = false));
         }
       } else if (char === "[") {
         square += 1;
