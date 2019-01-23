@@ -13,9 +13,14 @@ class TextArea extends React.Component {
   };
 
   handleInput = e => {
-    this.setState({
-      value: e.target.value
-    });
+    this.setState(
+      {
+        value: e.target.value
+      },
+      () => {
+        this.handleSyntax();
+      }
+    );
   };
 
   // these functions are called on keydown event
@@ -28,34 +33,34 @@ class TextArea extends React.Component {
     this.closingSquareFirst();
   };
 
-  // Makes sure there are the same number of opening and closing curly braces
-  handleCurlyBraces = () => {
+  getLengths = (openChar, closeChar) => {
     const { value } = this.state;
     const valueArray = value.split("");
-    const openBraces = valueArray.filter(char => char === "{");
-    const closeBraces = valueArray.filter(char => char === "}");
-    if (openBraces.length !== closeBraces.length) {
-      this.setState({
-        braceError: true
+    const openingChar = valueArray.filter(char => char === openChar);
+    const closingChar = valueArray.filter(char => char === closeChar);
+    return openingChar.length === closingChar.length;
+  };
+
+  // Makes sure there are the same number of opening and closing curly braces
+  handleCurlyBraces = () => {
+    if (!this.getLengths("{", "}")) {
+      this.setState(state => {
+        state.braceError = true;
       });
-    } else if (openBraces.length === closeBraces.length) {
-      this.setState({
-        braceError: false
+    } else if (this.getLengths("{", "}")) {
+      this.setState(state => {
+        state.braceError = false;
       });
     }
   };
 
   // Makes sure there are the same number of opening and closing parentheses
   handleParenth = () => {
-    const { value } = this.state;
-    const valueArray = value.split("");
-    const openParenth = valueArray.filter(char => char === "(");
-    const closeParenth = valueArray.filter(char => char === ")");
-    if (openParenth.length !== closeParenth.length) {
+    if (!this.getLengths("(", ")")) {
       this.setState({
         parenthError: true
       });
-    } else if (openParenth.length === closeParenth.length) {
+    } else if (this.getLengths("(", ")")) {
       this.setState({
         parenthError: false
       });
@@ -64,15 +69,11 @@ class TextArea extends React.Component {
 
   // Ensures same number of opening and closing square brackets
   handleSquareBrackets = () => {
-    const { value } = this.state;
-    const valueArray = value.split("");
-    const openSquare = valueArray.filter(char => char === "[");
-    const closeSquare = valueArray.filter(char => char === "]");
-    if (openSquare.length !== closeSquare.length) {
+    if (!this.getLengths("[", "]")) {
       this.setState({
         squareError: true
       });
-    } else if (openSquare.length === closeSquare.length) {
+    } else if (this.getLengths("[", "]")) {
       this.setState({
         squareError: false
       });
@@ -160,7 +161,6 @@ class TextArea extends React.Component {
           cols="40"
           value={this.state.value}
           onChange={this.handleInput}
-          onKeyDown={this.handleSyntax}
         />
         <div className="errors-description">
           {this.state.braceError ? (
