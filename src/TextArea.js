@@ -25,12 +25,12 @@ class TextArea extends React.Component {
 
   // these functions are called on keydown event
   handleSyntax = e => {
-    this.handleParenth();
-    this.handleCurlyBraces();
-    this.handleSquareBrackets();
-    this.closingCurlyFirst();
-    this.closingParenthFirst();
-    this.closingSquareFirst();
+    this.handlePairs("{", "}", "braceError");
+    this.handlePairs("[", "]", "squareError");
+    this.handlePairs("(", ")", "parenthError");
+    this.refactored("}", "{", "closeCurlyFirst");
+    this.refactored(")", "(", "closingParenthFirst");
+    this.refactored("]", "[", "closingSquareFirst");
   };
 
   getLengths = (openChar, closeChar) => {
@@ -41,90 +41,30 @@ class TextArea extends React.Component {
     return openingChar.length === closingChar.length;
   };
 
-  // Makes sure there are the same number of opening and closing curly braces
-  handleCurlyBraces = braceError => {
-    if (!this.getLengths("{", "}")) {
-      this.setState(state => (state.braceError = true));
-    } else if (this.getLengths("{", "}")) {
-      this.setState(state => (state.braceError = false));
+  handlePairs = (open, close, propString) => {
+    if (!this.getLengths(open, close)) {
+      this.setState(state => (state[propString] = true));
+    } else {
+      this.setState(state => (state[propString] = false));
     }
   };
 
-  // Makes sure there are the same number of opening and closing parentheses
-  handleParenth = () => {
-    if (!this.getLengths("(", ")")) {
-      this.setState(state => (state.parenthError = true));
-    } else if (this.getLengths("(", ")")) {
-      this.setState(state => (state.parenthError = false));
-    }
-  };
-
-  // Ensures same number of opening and closing square brackets
-  handleSquareBrackets = () => {
-    if (!this.getLengths("[", "]")) {
-      this.setState(state => (state.squareError = true));
-    } else if (this.getLengths("[", "]")) {
-      this.setState(state => (state.squareError = false));
-    }
-  };
-
-  // Ensures that there aren't any closing curlies before opening ones
-  closingCurlyFirst = () => {
+  refactored = (key1, key2, propString) => {
     let curly = 0;
     const { value } = this.state;
     const valueArray = value.split("");
     valueArray.forEach(char => {
-      if (char === "}") {
+      if (char === key1) {
         curly -= 1;
         if (curly <= -1) {
-          this.setState(state => (state.closeCurlyFirst = true));
+          this.setState(state => (state[propString] = true));
         } else if (curly > -1) {
-          this.setState(state => (state.closeCurlyFirst = false));
+          this.setState(state => (state[propString] = false));
         }
-      } else if (char === "{") {
+      } else if (char === key2) {
         curly += 1;
       }
       return curly;
-    });
-  };
-
-  // ensures no closing parentheses before opening
-  closingParenthFirst = () => {
-    let parenth = 0;
-    const { value } = this.state;
-    const valueArray = value.split("");
-    valueArray.forEach(char => {
-      if (char === ")") {
-        parenth -= 1;
-        if (parenth <= -1) {
-          this.setState(state => (state.closeParenthFirst = true));
-        } else {
-          this.setState(state => (state.closeParenthFirst = false));
-        }
-      } else if (char === "(") {
-        parenth += 1;
-      }
-      return parenth;
-    });
-  };
-
-  // ensures no closing square brackets before opening
-  closingSquareFirst = () => {
-    let square = 0;
-    const { value } = this.state;
-    const valueArray = value.split("");
-    valueArray.forEach(char => {
-      if (char === "]") {
-        square -= 1;
-        if (square <= -1) {
-          this.setState(state => (state.closeSquareFirst = true));
-        } else {
-          this.setState(state => (state.closeSquareFirst = false));
-        }
-      } else if (char === "[") {
-        square += 1;
-      }
-      return square;
     });
   };
 
